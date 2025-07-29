@@ -1,47 +1,21 @@
-let timerDisplay = document.querySelector('.timerDisplay');
-let stopBtn = document.getElementById('stopBtn');
-let startBtn = document.getElementById('startBtn');
-let resetBtn = document.getElementById('resetBtn');
+const form = document.querySelector('form');
+// this usecase will give you empty
+// const height = parseInt(document.querySelector('#height').value)
 
-let msec = 00;
-let secs = 00;
-let mins = 00;
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
 
-let timerId = null;
+  const height = parseInt(document.querySelector('#height').value);
+  const weight = parseInt(document.querySelector('#weight').value);
+  const results = document.querySelector('#results');
 
-startBtn.addEventListener('click', function(){
-    if(timerId !== null){
-        clearInterval(timerId);
-    }
-    timerId = setInterval(startTimer, 10);
+  if (height === '' || height < 0 || isNaN(height)) {
+    results.innerHTML = `Please give a valid height ${height}`;
+  } else if (weight === '' || weight < 0 || isNaN(weight)) {
+    results.innerHTML = `Please give a valid weight ${weight}`;
+  } else {
+    const bmi = (weight / ((height * height) / 10000)).toFixed(2);
+    //show the result
+    results.innerHTML = `<span>${bmi}</span>`;
+  }
 });
-
-stopBtn.addEventListener('click', function(){
-    clearInterval(timerId);
-});
-
-resetBtn.addEventListener('click', function(){
-    clearInterval(timerId);
-    timerDisplay.innerHTML = `00 : 00 : 00`;
-    msec = secs = mins = 00;
-});
-
-function startTimer(){
-    msec++;
-    if(msec == 100){
-        msec = 0;
-        secs++;
-        if(secs == 60){
-            secs = 0;
-mins++;
-        }
-    }
-
-    let msecString = msec < 10 ? `0${msec}` : msec;
-    let secsString = secs < 10 ? `0${secs}` : secs;
-    let minsString = mins < 10 ? `0${mins}` : mins;
-    
-
-    timerDisplay.innerHTML = `${minsString} : ${secsString} : ${msecString}`;
-
-}
